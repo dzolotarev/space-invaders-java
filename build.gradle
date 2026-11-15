@@ -1,0 +1,67 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'io.github.dzolotarev'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'invaders.Game'
+}
+
+jar {
+    // Fat-jar: всё в одном файле, запуск через `java -jar`
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes 'Main-Class': 'invaders.Game'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    {
+        exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+    }
+}
+
+// --- Нативная сборка через jpackage (Linux AppImage) ---
+// Запуск: ./gradlew nativeImage
+tasks.register('nativeImage') {
+    group = 'build'
+    description = 'Собирает нативный AppImage через jpackage'
+    dependsOn 'jar'
+
+    doLast {
+        def jpackage = System.getenv('JPACKAGE') ?: 'jpackage'
+        def jarFile = jar.archiveFile.get().asFile
+        def distDir = layout.buildDirectory.dir('jpackage').get().asFile
+        def type = System.getenv('JP_TYPE') ?: 'app-image'
+
+        def args = [
+            jpackage,
+            '--name', 'SpaceInvaders',
+            '--app-version', project.version.toString(),
+            '--vendor', 'dzolotarev',
+            '--description', 'Space Invaders — классическая аркада на Java',
+            '--input', jar.destinationDirectory.get().asFile.absolutePath,
+            '--main-jar', jarFile.name,
+            '--main-class', 'invaders.Game',
+            '--dest', distDir.absolutePath,
+            '--type', type
+        ]
+        exec {
+            commandLine args
+            workingDir project.projectDir
+        }
+        println "Нативная сборка готова: ${distDir}"
+    }
+}
