@@ -46,6 +46,10 @@ tasks.register('nativeImage') {
         def distDir = layout.buildDirectory.dir('jpackage').get().asFile
         def type = System.getenv('JP_TYPE') ?: 'app-image'
 
+        // jpackage не перезаписывает готовый app-image — очищаем выходной каталог.
+        delete distDir
+        distDir.mkdirs()
+
         def args = [
             jpackage,
             '--name', 'SpaceInvaders',
@@ -65,5 +69,26 @@ tasks.register('nativeImage') {
             workingDir project.projectDir
         }
         println "Нативная сборка готова: ${distDir}"
+    }
+}
+
+// Упаковка app-image в tar.gz для релизных ассетов.
+// Запуск: ./gradlew packageDist   результат: build/dist/space-invaders-java-<version>-linux-x64.tar.gz
+tasks.register('packageDist') {
+    group = 'distribution'
+    description = 'Складывает app-image в build/dist/*.tar.gz'
+    dependsOn 'nativeImage'
+
+    doLast {
+        def jpackageDir = layout.buildDirectory.dir('jpackage').get().asFile
+        def outDir = layout.buildDirectory.dir('dist').get().asFile
+        outDir.mkdirs()
+        def archive = new File(outDir, "space-invaders-java-${project.version}-linux-x64.tar.gz")
+        archive.delete()
+        exec {
+            commandLine 'tar', '-czf', archive.absolutePath, 'SpaceInvaders'
+            workingDir jpackageDir
+        }
+        println "Архив готов: ${archive.absolutePath} (${archive.length()} байт)"
     }
 }
