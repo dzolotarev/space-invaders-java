@@ -78,6 +78,13 @@ JP_TYPE=app-image ./gradlew nativeImage
 # Результат: build/jpackage/SpaceInvaders/
 ```
 
+App-image включает урезанный JRE (`jlink`, только `java.base` + `java.desktop`, ~62 МБ) — Java на машине не нужна:
+
+```bash
+tar xzf space-invaders-java-1.0.0-linux-x64.tar.gz
+./SpaceInvaders/bin/SpaceInvaders
+```
+
 ## Структура проекта
 
 ```
