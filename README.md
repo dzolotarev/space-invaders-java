@@ -10,7 +10,8 @@
 
 | Игровой процесс | Босс + бонусы |
 |---|---|
-| Корабль, сетка пришальцев, щиты | Босс с полосой HP, падающие ромбы-бонусы |
+| ![Игровой процесс](docs/screenshot-gameplay.png) | ![Босс и бонусы](docs/screenshot-boss.png) |
+| Сетка 8×5, пули, ракета, щиты с пробоинами | Босс с полосой HP, все типы бонусов в воздухе |
 
 ## Возможности
 
@@ -81,6 +82,7 @@ JP_TYPE=app-image ./gradlew nativeImage
 
 ```
 ├── build.gradle                  # Gradle: jar + jpackage
+├── docs/                         # скриншоты для README и релиза
 ├── settings.gradle
 ├── gradlew                       # Gradle wrapper
 ├── run.sh                        # Быстрый запуск через javac
