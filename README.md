@@ -48,7 +48,7 @@
 
 ### Требования
 - JDK 17+ (для jar)
-- Для нативной сборки: `jpackage` (входит в JDK 14+)
+- Для нативной сборки: `jpackage` (входит в JDK 14+). Внутрь app-image попадает JRE того JDK, которым запущен `jpackage` — релизные архивы собраны на Temurin (Eclipse Adoptium): `JPACKAGE=/path/to/temurin/bin/jpackage ./gradlew nativeImage`
 
 ### Вариант 1: Gradle (рекомендуется)
 
@@ -60,6 +60,10 @@ java -jar build/libs/space-invaders-java-1.0.0.jar
 # Нативный бинарник (app-image)
 ./gradlew nativeImage
 ./build/jpackage/SpaceInvaders/bin/SpaceInvaders
+
+# Он же в tar.gz для релиза
+./gradlew packageDist
+# Результат: build/dist/space-invaders-java-1.0.0-linux-x64.tar.gz
 ```
 
 ### Вариант 2: напрямую через javac
@@ -78,7 +82,7 @@ JP_TYPE=app-image ./gradlew nativeImage
 # Результат: build/jpackage/SpaceInvaders/
 ```
 
-App-image включает урезанный JRE (`jlink`, только `java.base` + `java.desktop`, ~62 МБ) — Java на машине не нужна:
+App-image включает урезанный JRE (`jlink`, только `java.base` + `java.desktop`, ~54 МБ; собран на Temurin) — Java на машине не нужна:
 
 ```bash
 tar xzf space-invaders-java-1.0.0-linux-x64.tar.gz
