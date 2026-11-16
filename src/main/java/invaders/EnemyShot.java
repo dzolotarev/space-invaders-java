@@ -2,7 +2,7 @@ package invaders;
 
 import java.awt.*;
 
-/** Выстрел пришальца, летит вниз. */
+/** Выстрел пришельца, летит вниз. */
 public class EnemyShot {
     public static final int SPEED = 5;
     int x, y;

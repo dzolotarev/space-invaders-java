@@ -9,7 +9,7 @@ import javax.swing.*;
 
 /**
  * Space Invaders — классическая аркада на Java Swing.
- * Корабль внизу, волны пришальцев сверху, босс в конце волн.
+ * Корабль внизу, волны пришельцев сверху, босс в конце волн.
  * Система бонусов: сердечко, скорострельность, двойной пулемёт,
  * ракеты, гранаты, ядерное оружие.
  */
@@ -239,7 +239,7 @@ public class Game extends JPanel implements Runnable {
             }
         }
 
-        // --- пули пришальцев ---
+        // --- пули пришельцев ---
         for (EnemyShot es : grid.enemyShots()) {
             es.update(dt);
             if (!es.active) continue;
@@ -256,7 +256,7 @@ public class Game extends JPanel implements Runnable {
         particles.update(dt);
     }
 
-    /** Убийство пришальца: очки, частицы, шанс дропа бонуса. */
+    /** Убийство пришельца: очки, частицы, шанс дропа бонуса. */
     private void onInvaderKilled(Invader inv) {
         score += inv.points;
         particles.burst(inv.x + Invader.WIDTH / 2, inv.y + Invader.HEIGHT / 2, inv.color);
@@ -272,7 +272,7 @@ public class Game extends JPanel implements Runnable {
         nextWave();
     }
 
-    /** Взрыв по площади: убивает всех пришальцев в радиусе. */
+    /** Взрыв по площади: убивает всех пришельцев в радиусе. */
     private void explodeArea(int cx, int cy, int radius, Color color) {
         particles.burst(cx, cy, color);
         particles.burst(cx, cy, new Color(255, 220, 120));
@@ -388,7 +388,7 @@ public class Game extends JPanel implements Runnable {
         return 0;
     }
 
-    /** Ядерный удар: уничтожает ВСЕХ пришальцев и босса. */
+    /** Ядерный удар: уничтожает ВСЕХ пришельцев и босса. */
     private void fireNuclear() {
         if (nuclearAmmo <= 0) return;
         nuclearAmmo--;
